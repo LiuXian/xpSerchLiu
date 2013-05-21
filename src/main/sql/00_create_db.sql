@@ -1,5 +1,5 @@
--- Database: xpsearchyao_db
-CREATE DATABASE xpsearchyao_db
+-- Database: xpsearchliu_db
+CREATE DATABASE xpsearchliu_db
   WITH OWNER = postgres
        ENCODING = 'UTF8'
        TABLESPACE = pg_default
@@ -7,9 +7,9 @@ CREATE DATABASE xpsearchyao_db
 
 
        
--- Schema: xpsearchyao_schema
+-- Schema: xpsearchliu_schema
 
-CREATE SCHEMA xpsearchyao_schema
+CREATE SCHEMA xpsearchliu_schema
   AUTHORIZATION postgres;
 
 

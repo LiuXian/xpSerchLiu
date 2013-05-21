@@ -19,8 +19,8 @@ import org.xml.sax.helpers.DefaultHandler;
 public class DataReader {
 
 
-    public static List<Map> readXML() {
-    	URL dataPath = DataReader.class.getClassLoader().getResource("xpsearchliu/sampledata/Users.xml");
+    public static List<Map> readXML(String name) {
+    	URL dataPath = DataReader.class.getClassLoader().getResource("xpsearchliu/sampledata/"+name);
         List<Map> list = new ArrayList();
         try {
         	 SAXParserFactory factory = SAXParserFactory.newInstance();  
@@ -67,7 +67,4 @@ public class DataReader {
 	   return o.toString().replaceAll("\'", "''");
    }
    
-   public static void main(String[] args) {
-	readXML();
-}
 }

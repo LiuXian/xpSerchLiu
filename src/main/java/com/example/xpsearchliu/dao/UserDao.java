@@ -21,7 +21,7 @@ public class UserDao {
 			.append(" (id,reputation,creationdate,aboutme,displayname,lastaccessdate,")
 			.append("websiteurl,location,views,upvotes,downvotes,emailhash)")
 			.append(" values ");
-			for(Map m:DataReader.readXML()){
+			for(Map m:DataReader.readXML("Users.xml")){
 				sql.append("(").append(m.get("id")).append(",")
 					.append(m.get("reputation")).append(",")
 					.append(getDateString(m.get("creationdate"))).append(",")

@@ -1,5 +1,23 @@
+CREATE TABLE xpsearchliu_schema."user"
+(
+  id bigint NOT NULL,
+  reputation bigint,
+  creationdate date,
+  displayname character(256),
+  lastaccessdate date,
+  websiteurl text,
+  location text,
+  aboutme text,
+  views bigint,
+  upvotes bigint,
+  downvotes bigint,
+  emailhash character(256),
+  age bigint,
+  CONSTRAINT user_pkey PRIMARY KEY (id)
+)
 
-CREATE TABLE post (
+
+CREATE TABLE xpsearchliu_schema.post (
     id bigint NOT NULL,
     acceptedanswerid bigint,
     answercount bigint,
@@ -18,41 +36,3 @@ CREATE TABLE post (
     title character varying(255),
     viewcount bigint
 );
-
-
-CREATE TABLE comment (
-    id bigint NOT NULL,
-    postid bigint,
-    text text,
-    creationdate timestamp with time zone,
-    userid bigint
-);
-
-
-CREATE TABLE xpsearchyao_schema."user"
-(
-  id bigint NOT NULL,
-  firstname character varying(255),
-  lastname character varying(255),
-  password character varying(255),
-  photourl character varying(255),
-  username character varying(255),
-  aboutme character varying(255),
-  createdate timestamp without time zone,
-  displayname character varying(255),
-  downvotes bigint,
-  emailhash character varying(255),
-  lastaccessdate timestamp without time zone,
-  location character varying(255),
-  reputation bigint,
-  upvotes bigint,
-  views bigint,
-  CONSTRAINT user_pkey PRIMARY KEY (id)
-)
-
-CREATE TABLE xpsearchyao_schema.userpostrel
-(
-  userid bigint NOT NULL,
-  postid bigint NOT NULL,
-  CONSTRAINT userpostrel_pkey PRIMARY KEY (userid, postid)
-)
