@@ -1,0 +1,166 @@
+/* TODO: You should clear this css and make it your own (this is not a boostrap css, just a css
+ *       to support the quickstart index page.  
+ * 
+ * NOTE: For advanced application, we recommend going with Twitter Bootstrap and lesscss (Snow has 
+ * builtin it support for less)
+ */
+
+body{
+  height: 100%;
+  background-image: url(images/body-bg.png);
+}
+em{
+  font-family: monospace;
+  color: #5588bb;
+}
+
+.mainPage{
+	margin-top:10%;
+	text-align: center;
+}
+
+.header{
+	font-size: 30px;
+	line-height: 30px;
+}
+
+.searchForm{
+	width: 700px;
+	margin:15px auto;
+}
+
+.searchInput{
+	width:555px;
+}
+
+.typeContainer label{
+		display:inline-block;
+		width:auto;
+		margin-left:10px;
+}	
+
+.typeContainer label [type="radio"]{
+		margin-top: -2px;
+}
+
+.btns{
+	text-align: center;	
+}
+
+.searchBtn{
+	margin-top: -25px;
+}
+
+.nav{
+	display: inline-block;
+	margin: 0;	
+}
+
+.importType{
+	width:auto;	
+}
+
+.resultsPage{
+	margin:15px;
+	width:auto;
+	font-size: 16px;
+}
+
+.logo{
+	font-size: 17px;
+	color: rgb(61, 146, 213);
+	line-height: 30px;
+	font-weight: bold;
+}
+
+.results{
+	padding:10px;	
+	padding-left: 80px;
+}
+
+.title{
+	color: #12c;
+}
+
+.details{
+	font-size: 13px;
+	margin-bottom: 10px;	
+}
+
+b{
+	font-weight: normal;
+	color: red;
+}
+
+.author{
+	font-size: 14px;
+	margin-bottom:10px;
+}
+
+.ControlBar{
+	position:absolute;
+	z-index: 2;
+}
+
+.MainScreen-main{
+	position: absolute;
+	top:113px;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	overflow: auto;
+}
+
+.searchResult{
+	top:43px;
+}
+.ReportHeader {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.ReportHeader .ControlBar {
+  border-bottom: 1px solid #ddd;
+  width: 100%;
+}
+.ReportHeader .ControlBar .toolItems {
+  position: relative;
+  min-width: 430px;
+  height: 30px;
+  margin: 5px 10px;
+}
+.ReportHeader .ControlBar .toolItems .toolbar-item {
+  position: relative;
+  min-width: 100px;
+  float: left;
+  margin: 5px 5px 5px 5px;
+}
+.ReportHeader .ControlBar .toolItems .toolbar-item label {
+  float: left;
+}
+.ReportHeader .ControlBar .toolItems .toolbar-item .toolbar-item-content {
+  float: left;
+  margin: 0 0 0 5px;
+}
+.ReportHeader .ControlBar .toolItems .toolbar-item input {
+  margin: 0 0 5px 10px;
+}
+.ReportHeader .ControlBar .toolItems .toolbar-item input[type="text"] {
+  height:10px;
+}
+
+.ReportHeader .ControlBar .toolItems .toolbar-item span {
+  margin-right: 10px;
+  margin-left: 5px;
+}
+.ReportHeader .ControlBar .toolItems .toolbar-button {
+  position: relative;
+  float: right;
+  margin: 5px 5px 5px 5px;
+}
+
+.EaselJSForceClusterSlider{
+	height: 100%;
+}

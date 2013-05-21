@@ -1,0 +1,127 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.2.2
+-- Dumped by pg_dump version 9.2.2
+-- Started on 2013-05-10 18:06:30
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+SET search_path = xpsearchyao_schema, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 173 (class 1259 OID 28761)
+-- Name: comment; Type: TABLE; Schema: xpsearchyao_schema; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE comment (
+    id bigint NOT NULL,
+    postid bigint,
+    text text,
+    creationdate timestamp with time zone,
+    userid bigint
+);
+
+
+ALTER TABLE xpsearchyao_schema.comment OWNER TO postgres;
+
+--
+-- TOC entry 1930 (class 0 OID 28761)
+-- Dependencies: 173
+-- Data for Name: comment; Type: TABLE DATA; Schema: xpsearchyao_schema; Owner: postgres
+--
+
+COPY comment (id, postid, text, creationdate, userid) FROM stdin;
+2	4	Beat me to it, eh?	2010-09-13 19:21:26.877+08	27
+4	21	I will add that, sometimes apps do need to be closed but you can typically do that within the OS. You do not need a Task Manager to close apps, you can go to Settings > Applications > Running Services (may be different depending on OS version). From the menu you can press Force Quit.	2010-09-13 19:27:49.007+08	31
+5	21	no need for a task killer to do that Sheldon, just go into the normal settings :D	2010-09-13 19:29:00.72+08	56
+6	15	This is a bad idea. It will solve your problem but it will also make it so that if the Google Voice app ever crashes or you are in an area without data coverage, you will not get your text messages. It is much better to leave this unchecked and then uncheck the "Notifications via text message" box in the Google Voice app on your phone. This ensures that you don't get double-notifications, but still get text messages if the Google Voice app can't connect.	2010-09-13 19:29:42.247+08	45
+8	35	Yeah, it annoyed me that there was no way to remove the amazon mp3 app	2010-09-13 19:34:03.597+08	59
+10	55	This will remove the app's icon from your Home screen, but not actually uninstall the app.	2010-09-13 19:39:35.613+08	36
+11	55	If you hold the icon over the bin for a while , you get a "drop to uninstall" notification , the behavior may have been changed by the manufacturer.	2010-09-13 19:42:00.877+08	17
+14	54	Note that usually you only need to wipe when switching Android versions. This differs per ROM though.	2010-09-13 19:44:13.647+08	65
+15	55	@Matt Casto, while you are correct that simply dragging and dropping a home screen icon onto the garbage can will delete the icon from the homescreen, Rohan also stated that if you drag and pause for a few seconds over the trashcan, "drop to uninstall" appears, and will uninstall the application. Which is something I didn't know until he pointed it out. Thanks Rohan!	2010-09-13 19:44:29.683+08	\N
+16	70	While I can't exactly answer the question, I strongly suggest against upgrading your radio, for it's the easiest way to brick your phone completely.	2010-09-13 19:44:44.003+08	65
+17	74	+1 gotta love CyanogenMod.  I believe they support 15 devices now with CM6.	2010-09-13 19:44:51.507+08	13
+18	26	Is there a good keyword to search with to find apps in the Market?	2010-09-13 19:45:06.14+08	36
+19	35	possible duplicate of [How to remove pre-installed apps like Peep and Friend Stream from my HTC phone?](http://android.stackexchange.com/questions/50/how-to-remove-pre-installed-apps-like-peep-and-friend-stream-from-my-htc-phone)	2010-09-13 19:45:21.71+08	65
+20	44	This is working on nonrooted devices ?	2010-09-13 19:48:39.613+08	37
+21	74	There's no need to root the phone, it's possible to flash a non-rooted image of 2.x to a phone.	2010-09-13 19:48:45.047+08	65
+22	15	Didn't realize that. Voting your answer up, mine down.	2010-09-13 19:48:55.637+08	29
+23	85	Since this isn't really an answer to your problem (but it might be!) I'll leave it as a comment.  What do you need this for?  Would Dropbox do what you need?	2010-09-13 19:49:50.79+08	10
+24	15	Moto DROID v1 with latest GV.  Notifications via text message is unchecked, phone is set as Receive Text Messages in GV web settings.  This causes double-notification (triple if also getting e-mail notifications of new text messages).	2010-09-13 19:50:31.287+08	9
+26	43	Could you indicate which handset you are using? Some have had that feature crippled	2010-09-13 19:50:43.83+08	80
+30	89	The 'click' sound is required by law in some areas to alert those nearby that a photo is being taken.  It is intended as a measure to prevent privacy violation.	2010-09-13 19:52:44.283+08	9
+31	42	Yes, there definitely should be more apps using OAuth protocol! There seems to be a feature request to get OAuth support for NewsRob: http://newsrob.uservoice.com/forums/35624-general/suggestions/930949-implement-a-secure-method-of-authorizing-a-user-s-?ref=comments Sorry, but I don't know any frontend to greader doing it already.	2010-09-13 19:54:04.993+08	75
+32	88	would be very interested in this, they are often too slow going.	2010-09-13 19:54:31.35+08	87
+33	42	And btw, it's OAuth, not OpenID we're talking about here.	2010-09-13 19:55:07.767+08	75
+34	98	As some history for why you just can't turn it off, digital cameras (and camera phones in particular) were starting to be used by peeping toms precisely because they didn't make any sound when taking pictures.	2010-09-13 19:55:19.387+08	79
+35	54	Many times it would be safe to just install over your current installations. But I've personally had issues when installing one 2.2 ROM  (Sapphire) over another (Bugless Beast)	2010-09-13 19:58:37.477+08	34
+36	15	@JadeMason: In the Google Voice app settings, there's an area where you can select the phone number of the current phone. Is that set correctly?	2010-09-13 20:00:58.563+08	45
+37	26	Probably the most obvious would be Clock or Dock and possibly replacement to narrow it down.  Appbrain is excellent for finding apps simply because you can search on their website.	2010-09-13 20:01:37.133+08	21
+38	20	After seeing JadeMason's comment on Paul Roub's answer I'm kind of unsure about this now. I know it works for me, but can't be sure it's the best way to do things.	2010-09-13 20:02:08.3+08	45
+39	44	Any idea doing it without rooting the device first?	2010-09-13 20:04:22.327+08	63
+40	15	@Rohan: Yes, the number under 'This phone's number' appears correctly.	2010-09-13 20:04:51.06+08	9
+43	42	@Kaitsu yep, you're right ... I even knew the difference and typed the wrong thing!	2010-09-13 20:10:06.603+08	36
+44	80	Internet doesn't show up, I tried Browser, but defaults is grayed out	2010-09-13 20:10:10.327+08	70
+45	5	Is your wireless network set to broadcast the SSID? I've heard of people having problems when this is hidden (and there is no real benefit to doing so)	2010-09-13 20:12:11.193+08	86
+46	122	This is the way I do it too, on the same kind of device.	2010-09-13 20:12:28.457+08	63
+47	131	Actually after clicking the menu button I had to click View Type, then customizable grid. But otherwise those directions did it! Thanks!!!	2010-09-13 20:16:03.897+08	14
+48	120	Shucks.  Looks like I may be rooting my phone in the not too distant future.	2010-09-13 20:17:22.293+08	79
+49	98	I am rooted, so thanks for the path. There's no internal setting to mute or change it? Maybe i will have to replace camera_click.ogg with light sabers or something	2010-09-13 20:21:07.13+08	80
+50	137	I'm running 2.2 unrooted on Droid v1. The "Alarm & Timer" app sounds familiar ... maybe it was removed in 2.2?	2010-09-13 20:21:14.78+08	36
+51	89	Yeah, I thought I had heard something like that, but for telephone voice recorder apps.	2010-09-13 20:22:08.203+08	80
+53	74	@Arda Xi can you post how that works?	2010-09-13 20:24:06.597+08	57
+342	503	+1.  This is what I've always done.	2010-07-16 15:40:58.21+08	98
+55	127	I have the same problem with my HTC Hero and have searched for a solution in the past.  About a month ago I came to the conclusion that there was no easy solution.	2010-09-13 20:26:31.213+08	100
+57	46	Yea I figured this would be the way to go, tried it, says bad signature. I used the Mms.apk that is part of the .zip rom I used to install the current android running.	2010-09-13 20:34:06.357+08	49
+58	71	Thanks! Didn't know about the uninstall mechanics :)	2010-09-13 20:34:46.123+08	49
+60	91	See other answers' comments. Already have non-market installs enabled since I had swype installed :)	2010-09-13 20:35:11.613+08	49
+62	137	That's what I was thinking. I'll check my wifes Droid 2 when I get home and see if she has the Clock app instead of the Alarm & Timer.	2010-09-13 20:38:57.43+08	22
+63	153	What statistics are you referring to?  (And if this is due to battery statistics, why does rebooting seem to fix it temporarily?)	2010-09-13 20:40:06.807+08	102
+64	153	I was refering to the battery cache that schwiz posted about.  Im not entirely sure why rebooting would fix it.  Are you running a custom rom?	2010-09-13 20:41:12.467+08	21
+66	5	No, it isn't hidden.  The security is set to WPA-PSK.	2010-09-13 20:57:05.56+08	9
+72	10	Did not know about Auto-Retrieve. Thought that was what enabled all apps to get the sms. Oy vei.	2010-09-13 21:30:06.413+08	49
+73	21	I found Advanced Task Killer (even with Ads) to be a nicer UI. However you don't need it. Stock android has all the necessary tools. Kinda same reason I use Uninstaller vs from the application menu, just easier.	2010-09-13 21:31:50.84+08	49
+77	191	Sounds about right.	2010-09-13 22:40:29.473+08	111
+78	171	I don't see "Set alarm..." in the list of Voice Actions (http://www.google.com/mobile/voice-actions/).  Are you sure it is one?	2010-09-13 22:41:39.643+08	116
+83	196	I have a Milestone and I generally use the touchscreen to write text (the Swype app makes this very fast) so I'd like to be able to edit mistakes without having to slide the screen open. Just wondering if there is a nice way to do this, using the touchscreen?	2010-09-13 23:09:05.683+08	105
+85	172	How did you *get* the 2.2 update?  It's not being offered OTA...	2010-09-13 23:42:44.823+08	102
+86	153	No, no custom anything on this.  It's not rooted.	2010-09-13 23:43:25.133+08	102
+87	196	IMHO there is no stock way for doing this without using the D-pad or the trackball.	2010-09-13 23:54:08.823+08	63
+88	137	Just checked my wife's Droid 2 running 2.2 - she has the "Alarm & Timer" app.	2010-09-14 00:11:37.133+08	22
+89	15	@Rohan: I think you have the option between the app's notifications or SMS, but it's a trade off.  With the former, as you said, you have to be where you have data and the app must be running.  But with the latter, you are using SMS counting towards your cell plan's limit.  Conceivably, you can use a cell plan with data but no SMS by using GVoice for texts.	2010-09-14 00:15:52.937+08	116
+90	44	I see 127.0.0.1 localhost	2010-09-14 00:49:17.003+08	13
+91	219	Have you tried to unset the USB Debugging?	2010-09-14 01:32:51.847+08	133
+92	219	USB Debugging is not enabled.	2010-09-14 01:56:27.293+08	22
+94	197	How do you switch?	2010-09-14 02:16:56.737+08	133
+95	229	when will it be released?	2010-09-14 02:24:44.41+08	136
+97	216	Is it classed as a competing market place if AppBrain, and AndroidZoom (based on the comments) are just aggregators for the actual android marketplace?	2010-09-14 02:45:46.72+08	107
+98	212	FYI, for HTC, keyboard "haptic feedback" is found in the sound/display settings.	2010-09-14 02:55:59.987+08	107
+\.
+
+
+--
+-- TOC entry 1929 (class 2606 OID 28770)
+-- Name: primarykey; Type: CONSTRAINT; Schema: xpsearchyao_schema; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY comment
+    ADD CONSTRAINT primarykey PRIMARY KEY (id);
+
+
+-- Completed on 2013-05-10 18:06:31
+
+--
+-- PostgreSQL database dump complete
+--
+
