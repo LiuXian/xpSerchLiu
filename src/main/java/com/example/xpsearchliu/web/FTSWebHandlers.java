@@ -65,7 +65,7 @@ public class FTSWebHandlers {
 			.append(keywords)
 			.append("')) as rank,post.tag ")
 			.append(",users.displayname as name")
-			.append(" from xpsearchyao_schema.post post join xpsearchyao_schema.user users on users.id=post.owneruserid ")
+			.append(" from xpsearchliu_schema.post post join xpsearchliu_schema.user users on users.id=post.owneruserid ")
 			.append(" where post.tsv @@ plainto_tsquery('")
 			.append(keywords)
 			.append(" ')")
@@ -108,8 +108,8 @@ public class FTSWebHandlers {
 		}
 		List<Map> results = new ArrayList<Map>();
 		String sql = "select distinct c.userid as userid,u.displayname as name " +
-				"from xpsearchyao_schema.post p join xpsearchyao_schema.comment c " +
-				"on p.owneruserid = "+userId+" and c.postid = p.id join xpsearchyao_schema.user u on u.id = c.userid limit 10 offset 0";
+				"from xpsearchliu_schema.post p join xpsearchliu_schema.comment c " +
+				"on p.owneruserid = "+userId+" and c.postid = p.id join xpsearchliu_schema.user u on u.id = c.userid limit 10 offset 0";
 		PreparedStatement statement = dbConnectionManager.getConnection().prepareStatement(sql.toString());
 		ResultSet resultSet = statement.executeQuery();
 		while(resultSet.next()){
@@ -136,8 +136,8 @@ public class FTSWebHandlers {
 	private List getUsersSet(Long userId) throws SQLException{
 		List<Map> results = new ArrayList<Map>();
 		String sql = "select distinct c.userid as userid,u.displayname as name " +
-				"from xpsearchyao_schema.post p join xpsearchyao_schema.comment c " +
-				"on p.owneruserid = "+userId+" and c.postid = p.id join xpsearchyao_schema.user u on u.id = c.userid limit 10 offset 0";
+				"from xpsearchliu_schema.post p join xpsearchliu_schema.comment c " +
+				"on p.owneruserid = "+userId+" and c.postid = p.id join xpsearchliu_schema.user u on u.id = c.userid limit 10 offset 0";
 		PreparedStatement statement = dbConnectionManager.getConnection().prepareStatement(sql.toString());
 		ResultSet resultSet = statement.executeQuery();
 		while(resultSet.next()){
@@ -155,7 +155,7 @@ public class FTSWebHandlers {
 		return results;
 	}
 	private Map getUser(Long userId) throws SQLException{
-		String sql = "select id,displayname from xpsearchyao_schema.user where id = "+userId;
+		String sql = "select id,displayname from xpsearchliu_schema.user where id = "+userId;
 		PreparedStatement statement = dbConnectionManager.getConnection().prepareStatement(sql.toString());
 		ResultSet resultSet = statement.executeQuery();
 		Map m = new HashMap();
