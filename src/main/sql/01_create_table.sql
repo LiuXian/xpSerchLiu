@@ -36,3 +36,11 @@ CREATE TABLE xpsearchliu_schema.post (
     title character varying(255),
     viewcount bigint
 );
+
+CREATE TABLE xpsearchliu_schema.comment (
+    id bigint NOT NULL,
+    postid bigint,
+    text text,
+    creationdate timestamp with time zone,
+    userid bigint
+);

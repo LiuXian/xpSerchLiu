@@ -15,7 +15,8 @@
                 $e.find(".ControlBar").hide();
                 $e.find("li.d3jsPart").hide();
                 $e.find("li.fabricjsPart").hide();
-                
+                brite.display("EaselJSForceClusterSlider");
+    		  	$e.find(".ControlBar").show();
                 $('#sl1').slider().off('slide').on('slide', function(ev){
                 	if(view.level != ev.value){
                 		view.level = ev.value;
@@ -95,17 +96,10 @@
             		$li.addClass("active");
             		var menu = $li.attr("data-nav");
             		
-            		if(menu == "Search"){
-            		  	brite.display("Search");
-            		  	$e.find(".ControlBar").hide();
-            		}else if(menu == "ContactCluster"){
-            		  	brite.display("EaselJSForceClusterSlider");
+            		if(menu == "UserCluster"){
+            			brite.display("EaselJSForceClusterSlider");
             		  	$e.find(".ControlBar").show();
             		  	$(".MainScreen-main").css("top","113px");
-            		}else if(menu == "TagCluster"){
-            		  	brite.display("TagCluster");
-            		  	$e.find(".ControlBar").show();
-            			$(".MainScreen-main").css("top","113px");
             		}
             	}
             }
