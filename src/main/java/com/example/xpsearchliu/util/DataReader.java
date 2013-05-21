@@ -26,7 +26,6 @@ public class DataReader {
         	 SAXParserFactory factory = SAXParserFactory.newInstance();  
              SAXParser parser = factory.newSAXParser();  
              DataReader.SaxParseService handler = new DataReader().new SaxParseService();  
-             System.out.println(dataPath);
              parser.parse(dataPath.toString(),handler);
              list =  handler.getResult();
         } catch (FileNotFoundException e) {

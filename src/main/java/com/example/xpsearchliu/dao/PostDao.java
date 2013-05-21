@@ -1,16 +1,23 @@
 package com.example.xpsearchliu.dao;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Map;
 
+import com.example.xpsearchliu.DbConnectionManager;
 import com.example.xpsearchliu.util.DataReader;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
 public class PostDao {
 
-	public void init(){
+	@Inject
+	private DbConnectionManager dbConnectionManager;
+	
+	public void init() throws SQLException{
 		StringBuffer sql = new StringBuffer();
-		sql.append("insert into xpsearchyao_schema.").append("post")
+		sql.append("insert into xpsearchliu_schema.").append("post")
 		.append(" (id,acceptedanswerid,answercount,body,commentcount,communityowneddate,")
 		.append("creationdate,favoritecount,lasteditoruserid,owneruserid,posttypeid,score,tag,title,viewcount)")
 		.append(" values ");
@@ -30,9 +37,10 @@ public class PostDao {
 				.append(getString(m.get("tag"))).append(",")
 				.append(getString(m.get("title"))).append(",")
 				.append(m.get("viewcount")).append("),");
-			break;
 		}
 	
+		PreparedStatement statement = dbConnectionManager.getConnection().prepareStatement(sql.substring(0,sql.length()-1));
+		statement.execute();
 	}
 	
 	private String getDateString(Object src){
