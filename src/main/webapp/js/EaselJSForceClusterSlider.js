@@ -192,7 +192,9 @@
         		var fpos = [];
 		      	for(var i = 0; i < childrenData.length; i++){
 			        var cData = childrenData[i];
-			        var weight = cData.weight;
+			        
+			        var weight = Math.random()*9;
+			        //var weight = cData.weight;
 					//the higher weight, the closer the length
 					weight = 10 - weight;
 					
