@@ -66,7 +66,7 @@
 		return resultSet;
 	}
 	
-	ContactDaoHandler.prototype.getById = function(id) {
+	ContactDaoHandler.prototype.getById = function(oj) {
 		var objectType = this._entityType;
 		var resultSet = {};
 		var dataSet = app.dataSet;
@@ -74,16 +74,15 @@
 		return $.ajax({
 			url:'/getUsers',
 			data:{
-				userId:id
+				userId:oj.id,
+				level:oj.level
 			},
 			dataType:'json'
-			
 		}).done(function(data){
-			data.children = data.friends;
-			console.log(data);
 			return data;
 		});
 	}
+	
 	
 	ContactDaoHandler.prototype.update = function(data) {
 		app.dataSet = data;
