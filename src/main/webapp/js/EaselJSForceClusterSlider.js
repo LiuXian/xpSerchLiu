@@ -131,6 +131,7 @@
 			        node.originPotint = {cx:cx,cy:cy};
 			        node.relatedLine = line;
 			        node.angleVal = fpos[i].angleVal;
+			       // cData.weight =parseInt(1+Math.random()*8); 
 			        node.weight = cData.weight;
 			        
 			        //add the mouseover event for node
@@ -193,8 +194,9 @@
 		      	for(var i = 0; i < childrenData.length; i++){
 			        var cData = childrenData[i];
 			        
-			        var weight = Math.random()*9;
-			        //var weight = cData.weight;
+			        var weight = parseInt(Math.random()*8+1);
+			       // var weight = cData.weight;
+			        cData.weight = weight;
 					//the higher weight, the closer the length
 					weight = 10 - weight;
 					
