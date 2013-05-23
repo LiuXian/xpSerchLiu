@@ -13,9 +13,9 @@ import com.google.inject.Singleton;
 public class SeedData {
 	@WebApplicationHook(phase = AppPhase.INIT)
     public void seedData(UserDao userDao,PostDao postDao,CommentDao commentDao) throws SQLException {
-		userDao.initData();
-		postDao.init();
-		commentDao.init();
+//		userDao.initData();
+//		postDao.init();
+//		commentDao.init();
 	}
 	
 }
