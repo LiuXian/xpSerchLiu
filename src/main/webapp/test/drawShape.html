@@ -14,9 +14,9 @@
 	<script type="text/javascript">
 		var canvas=document.getElementById("canvas"); 
 		var stage = new createjs.Stage(canvas);
-		var line = drawshape.drawLine(300,400,500,400);
-		var childNode = drawshape.drawChildNode(300,400,10);
-		var centerNode = drawshape.drawCenterNode(500,400,10)
+		var line = drawshape.drawLine(300,400,500,400,"#ccc");
+		var childNode = drawshape.drawChildNode(300,400,8,null);
+		var centerNode = drawshape.drawCenterNode(500,400,8,null)
 		var text = drawshape.showText(300,400,"something");
 		stage.addChild(line);
 		stage.addChild(childNode);
