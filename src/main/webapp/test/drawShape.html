@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>drawNode Demo</title>
+	<script type="text/javascript" src="../js/jquery.min.js" ></script>
+ 	<script type="text/javascript" src="../js/handlebars.runtime-1.0.rc.1.min.js"></script>
+ 	<script type="text/javascript" src="../js/easeljs-NEXT.min.js"></script>
+	<script type="text/javascript" src="../js/brite-snapshot.js" ></script>
+	<script type="text/javascript" src="../js/drawshape.js"></script>
+</head>
+<body>
+	<canvas id="canvas" width="1000" height="700"></canvas>
+	<script type="text/javascript">
+		var canvas=document.getElementById("canvas"); 
+		var stage = new createjs.Stage(canvas);
+		var line = drawshape.drawLine(300,400,500,400,"#ccc");
+		var childNode = drawshape.drawChildNode(300,400,8,null);
+		var centerNode = drawshape.drawCenterNode(500,400,8,null)
+		var text = drawshape.showText(300,400,"something");
+		stage.addChild(line);
+		stage.addChild(childNode);
+		stage.addChild(centerNode);
+		stage.addChild(text);
+	 	stage.update();
+	</script>
+</body>
+</html>
