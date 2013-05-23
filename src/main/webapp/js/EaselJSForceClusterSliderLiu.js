@@ -23,6 +23,7 @@
 	          			level:1
 	          		 },
           		success:function(data){
+          			console.log(data);
           			showView.call(view,data);
           		}
           	});
@@ -54,11 +55,41 @@
 		var stage = new createjs.Stage(canvas);
 		view.stage = stage;
 		var r = 5;
-		console.log(drawshape.drawCenterNode);
 		var centerNode = drawshape.drawCenterNode.call(view,view.originPoint.x,view.originPoint.y,r,"blue");
 		centerNode.name = view.currentContainerName;
 		stage.addChild(centerNode);
-		stage.update();
-     	
+		data.cx = view.originPoint.x;
+		data.cy = view.originPoint.y;
+		showChildNode.call(view,data);
+		stage.update();     	
      }
+	 function showChildNode(parentNode){
+		var view = this;
+		var px = parentNode.cx;
+		var py = parentNode.cy;
+		var angle = 2*Math.PI/parentNode.children.length;
+		$.each(parentNode.children,function(i,node){
+			var x = px+100*Math.cos(i*angle);
+			var y = py+100*Math.sin(i*angle);
+			view.stage.addChild(drawshape.drawChildNode.call(view,x,y,5,"red"));
+			view.stage.addChild(drawshape.drawLine.call(view,px,py,x,y,"#ccc"));
+		});
+		
+	 }
+	 function calculateNodePosition(childrenData,originPoint,level,angle){
+		var view = this;
+		var rx = originPoint.x;
+		var ry = originPoint.y;
+		var baseLineLen = _baseLineLen[view.level - level];
+		var angle = Math.PI * 2 / childrenData.length ;
+		var findpos = [];
+      	for(var i = 0; i < childrenData.length; i++){
+	        var cData = childrenData[i];
+	        var l = baseLineLen;
+	        var cx = nx + l * Math.sin(angle * i + angle);
+	        var cy = ny + l * Math.cos(angle * i + angle);
+	        findpos.push({x:cx, y:cy, angleVal:(angle * i + angle)});
+	    }
+		return findpos;
+    }
 })(jQuery);
