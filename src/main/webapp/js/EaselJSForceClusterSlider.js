@@ -76,7 +76,7 @@
 				var $ClusterChart = $e.find(".clusterChart");
 				$ClusterChart.empty();
 				$ClusterChart.html('<canvas id="ClusterChart" ></canvas>');  
-				  
+				
 				var canvas = $e.find("#ClusterChart")[0];
 				canvas.width = $e.parent().width();
         		canvas.height = $e.parent().height();
@@ -85,7 +85,7 @@
         		view.canvasH = canvas.height;
         		view.originPoint = {x:view.canvasW/2, y: view.canvasH/2};
         		view.mousemove = false;
-
+        		
 				var stage = new createjs.Stage(canvas);
 				view.stage = stage;
 				stage.enableMouseOver(100);

@@ -19,8 +19,8 @@
     <script type="text/javascript" src="${_r.contextPath}/js/easeljs-NEXT.min.js"></script>
     <script type="text/javascript" src="${_r.contextPath}/js/tweenjs-0.4.0.min.js"></script>
     <script type="text/javascript" src="${_r.contextPath}/js/CSSPlugin.js"></script>
- 		
- 
+    <script type="text/javascript" src="${_r.contextPath}/js/drawshape.js"></script>
+
      <script type="text/javascript" src="${_r.contextPath}/js/templates.js"></script>
   </head>
 

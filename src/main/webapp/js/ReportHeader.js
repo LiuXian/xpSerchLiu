@@ -100,6 +100,10 @@
             			brite.display("EaselJSForceClusterSlider");
             		  	$e.find(".ControlBar").show();
             		  	$(".MainScreen-main").css("top","113px");
+            		}else if(menu == "EaselJSForceClusterSliderLiu"){
+            			brite.display("EaselJSForceClusterSliderLiu");
+            		  	$e.find(".ControlBar").show();
+            		  	$(".MainScreen-main").css("top","113px");
             		}
             	}
             }
