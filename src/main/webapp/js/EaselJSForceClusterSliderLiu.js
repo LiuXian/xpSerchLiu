@@ -1,4 +1,6 @@
 (function($){
+	var _colors = ["#0B95B1","#ff7f0e","#aec7e8","#dddddd"];
+
 	brite.registerView("EaselJSForceClusterSliderLiu",  {
 		emptyParent : true,
 		parent:".MainScreen-main"
@@ -10,8 +12,8 @@
         },
         postDisplay:function(data,config){
         	var view = this;
-        	view.level =3;
         	var $e = view.$el;
+        	view.level = $e.closest(".MainScreen").find(".ControlBar #sl1").val();        	
         	var scaleVal = $e.closest(".MainScreen").find(".ControlBar #sl2").val();
           	view.scaleVal = scaleVal/100;
           	$.ajax({
@@ -20,13 +22,14 @@
           		type:'Get',
           		data:{
           				id :10,
-	          			level:3
+	          			level:view.level
 	          		 },
           		success:function(data){
           			showView.call(view,data);
           		}
           	});
         }
+        
 	});
 	function showView(data){
      	var view = this;
@@ -55,7 +58,8 @@
 		var stage = new createjs.Stage(canvas);
 		view.stage = stage;
 		var r = 5;
-		var centerNode = drawshape.drawCenterNode.call(view,view.originPoint.x,view.originPoint.y,r,"blue");
+		var color = _colors[view.level - level];
+		var centerNode = drawshape.drawCenterNode.call(view,view.originPoint.x,view.originPoint.y,r,color,view.level);
 		centerNode.name = view.currentContainerName;
 		stage.addChild(centerNode);
 		data.cx = view.originPoint.x;
@@ -63,7 +67,7 @@
 		console.log(data);
 		showChildNode.call(view,data,level);
 		console.log(data);
-		stage.update();     	
+		stage.update(); 
      }
 	 function showChildNode(parentNode,level){
 		var view = this;
@@ -80,13 +84,17 @@
 		$.each(parentNode.children,function(i,node){
 			var x = px+100*Math.cos(i*angle);
 			var y = py+100*Math.sin(i*angle);
-			view.stage.addChild(drawshape.drawChildNode.call(view,x,y,5,"red"));
-			view.stage.addChild(drawshape.drawLine.call(view,px,py,x,y,"#ccc"));
+			console.log(level +"levle");
+			console.log(view.level+"view.level");
+			var color = _colors[view.level - level];
+			view.stage.addChild(drawshape.drawChildNode.call(view,x,y,5,color,view.level));
+			view.stage.addChild(drawshape.drawLine.call(view,px,py,x,y,color,view.level));
 			node.cx = x;
 			node.cy = y;
-			if(level>0){		
+			if(level>0){
 				showChildNode.call(view,node,level-1);
-				console.log(level);
+				
+				//console.log(level +"levle");
 			}
 			//showChildNode.call(view,node);
 		});
