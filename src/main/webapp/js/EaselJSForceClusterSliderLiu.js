@@ -1,4 +1,6 @@
 (function($){
+	var _colors = ["#0B95B1","#ff7f0e","#aec7e8","#dddddd"];
+	var _baseLineLen = [180,80,40,10];
 	brite.registerView("EaselJSForceClusterSliderLiu",  {
 		emptyParent : true,
 		parent:".MainScreen-main"
@@ -10,8 +12,8 @@
         },
         postDisplay:function(data,config){
         	var view = this;
-        	view.level =1;
         	var $e = view.$el;
+        	view.level = $e.closest(".MainScreen").find(".ControlBar #sl1").val();        	
         	var scaleVal = $e.closest(".MainScreen").find(".ControlBar #sl2").val();
           	view.scaleVal = scaleVal/100;
           	$.ajax({
@@ -20,18 +22,43 @@
           		type:'Get',
           		data:{
           				id :10,
-	          			level:1
+	          			level:view.level
 	          		 },
           		success:function(data){
-          			console.log(data);
           			showView.call(view,data);
           		}
           	});
+        },
+        docEvents:  {
+			"DO_LEVEL_CHANGE": function(event,extra){
+				var view = this;
+				
+				view.level = extra.level;
+				console.log(view.level);
+				$.ajax({
+	          		url:'/getUsers',
+	          		dataType:'json',
+	          		type:'Get',
+	          		data:{
+	          				id :10,
+		          			level:view.level
+		          		 },
+	          		success:function(data){
+	          			showView.call(view,data);
+	          		}
+	          	});
+			},
+			"DO_ZOOM_CHANGE": function(event,extra){
+				var view = this;
+				view.scaleVal = extra.scaleVal;
+				zoomController.call(view, extra.scaleVal);
+			}
         }
 	});
 	function showView(data){
      	var view = this;
      	var $e = view.$el;
+     	var level = view.level;
 		view.currentContainerName = "currentContainer";
 	    view.newContainerName = "newContainer";
 	    view.cName = "centerCircle";
@@ -55,41 +82,60 @@
 		var stage = new createjs.Stage(canvas);
 		view.stage = stage;
 		var r = 5;
-		var centerNode = drawshape.drawCenterNode.call(view,view.originPoint.x,view.originPoint.y,r,"blue");
-		centerNode.name = view.currentContainerName;
-		stage.addChild(centerNode);
+		var color = _colors[view.level - level];
+		var centerNode = app.shapes.drawCenterNode.call(view,view.originPoint.x,view.originPoint.y,r,color,view.level);
+		var name = app.shapes.showText.call(view,view.originPoint.x,view.originPoint.y,view.rootName);
+		
+		var container = new createjs.Container();
+		view.container = container;
+		var currentContainerName = "containerName";
+		view.currentContainerName = currentContainerName;
+		view.container.name = currentContainerName;
+		view.container.addChild(centerNode,name);
+		stage.addChild(container);		
 		data.cx = view.originPoint.x;
 		data.cy = view.originPoint.y;
-		showChildNode.call(view,data);
-		stage.update();     	
+		showChildNode.call(view,data,level);
+		stage.update(); 
      }
-	 function showChildNode(parentNode){
+	 function showChildNode(parentNode,level){
 		var view = this;
+		if(level==0){
+			return false;
+		}
 		var px = parentNode.cx;
 		var py = parentNode.cy;
-		var angle = 2*Math.PI/parentNode.children.length;
+		var length = parentNode.children.length;
+		if(length>0){
+			var angle = 2*Math.PI/parentNode.children.length;
+		}
 		$.each(parentNode.children,function(i,node){
-			var x = px+100*Math.cos(i*angle);
-			var y = py+100*Math.sin(i*angle);
-			view.stage.addChild(drawshape.drawChildNode.call(view,x,y,5,"red"));
-			view.stage.addChild(drawshape.drawLine.call(view,px,py,x,y,"#ccc"));
-		});
-		
+			var baseLineLength = _baseLineLen[view.level - level];
+			var x = px+baseLineLength*Math.cos(i*angle);
+			var y = py+baseLineLength*Math.sin(i*angle);
+			var color = _colors[view.level - level];
+			var name = app.shapes.showText.call(view,x,y,node.name);
+			var childNode = app.shapes.drawChildNode.call(view,x,y,5,color,view.level);
+			var line = app.shapes.drawLine.call(view,px,py,x,y,color,view.level);
+			
+			view.container.addChild(childNode,line,name);
+			view.stage.addChild(view.container);
+			node.cx = x;
+			node.cy = y;
+			if(level>0){
+				showChildNode.call(view,node,level-1);				
+			}
+		});				
 	 }
-	 function calculateNodePosition(childrenData,originPoint,level,angle){
-		var view = this;
-		var rx = originPoint.x;
-		var ry = originPoint.y;
-		var baseLineLen = _baseLineLen[view.level - level];
-		var angle = Math.PI * 2 / childrenData.length ;
-		var findpos = [];
-      	for(var i = 0; i < childrenData.length; i++){
-	        var cData = childrenData[i];
-	        var l = baseLineLen;
-	        var cx = nx + l * Math.sin(angle * i + angle);
-	        var cy = ny + l * Math.cos(angle * i + angle);
-	        findpos.push({x:cx, y:cy, angleVal:(angle * i + angle)});
-	    }
-		return findpos;
-    }
+	 function zoomController(val){
+			var view = this;
+			var stage = view.stage;
+			var containerLayout = stage.getChildByName(view.currentContainerName);
+			var scaleVal = val || view.scaleVal;
+			containerLayout.scaleX = scaleVal; 
+			containerLayout.scaleY = scaleVal; 
+			containerLayout.x = (1-scaleVal) * view.originPoint.x; 
+			containerLayout.y = (1-scaleVal) * view.originPoint.y; 
+			stage.update();
+		}
 })(jQuery);

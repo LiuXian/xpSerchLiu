@@ -69,7 +69,7 @@ public class UserWebHandlers {
 				map.put("weight", 1);
 				map.put("children",getUsersSet(resultSet.getLong("userId"),level));
 				results.add(map);
-			}			
+			}
 			resultSet.close();
 			statement.close();
 			return results;
