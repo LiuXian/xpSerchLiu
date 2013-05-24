@@ -28,8 +28,27 @@
           			showView.call(view,data);
           		}
           	});
+        },
+        docEvents:  {
+			"DO_LEVEL_CHANGE": function(event,extra){
+				var view = this;
+				
+				view.level = extra.level;
+				console.log(view.level);
+				$.ajax({
+	          		url:'/getUsers',
+	          		dataType:'json',
+	          		type:'Get',
+	          		data:{
+	          				id :10,
+		          			level:view.level
+		          		 },
+	          		success:function(data){
+	          			showView.call(view,data);
+	          		}
+	          	});
+			}
         }
-        
 	});
 	function showView(data){
      	var view = this;
@@ -64,9 +83,7 @@
 		stage.addChild(centerNode);
 		data.cx = view.originPoint.x;
 		data.cy = view.originPoint.y;
-		console.log(data);
 		showChildNode.call(view,data,level);
-		console.log(data);
 		stage.update(); 
      }
 	 function showChildNode(parentNode,level){
@@ -80,12 +97,9 @@
 		if(length>0){
 			var angle = 2*Math.PI/parentNode.children.length;
 		}
-		console.log(parentNode.children.length);
 		$.each(parentNode.children,function(i,node){
 			var x = px+100*Math.cos(i*angle);
 			var y = py+100*Math.sin(i*angle);
-			console.log(level +"levle");
-			console.log(view.level+"view.level");
 			var color = _colors[view.level - level];
 			view.stage.addChild(drawshape.drawChildNode.call(view,x,y,5,color,view.level));
 			view.stage.addChild(drawshape.drawLine.call(view,px,py,x,y,color,view.level));
@@ -94,10 +108,7 @@
 			if(level>0){
 				showChildNode.call(view,node,level-1);
 				
-				//console.log(level +"levle");
 			}
-			//showChildNode.call(view,node);
-		});
-				
+		});				
 	 }
 })(jQuery);
