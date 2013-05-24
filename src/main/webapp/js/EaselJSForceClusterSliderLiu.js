@@ -78,8 +78,8 @@
 		view.stage = stage;
 		var r = 5;
 		var color = _colors[view.level - level];
-		var centerNode = drawshape.drawCenterNode.call(view,view.originPoint.x,view.originPoint.y,r,color,view.level);
-		var name = drawshape.showText.call(view,view.originPoint.x,view.originPoint.y,view.rootName);
+		var centerNode = app.shapes.drawCenterNode.call(view,view.originPoint.x,view.originPoint.y,r,color,view.level);
+		var name = app.shapes.showText.call(view,view.originPoint.x,view.originPoint.y,view.rootName);
 		centerNode.name = view.currentContainerName;
 		stage.addChild(centerNode);
 		stage.addChild(name);
@@ -103,9 +103,9 @@
 			var x = px+100*Math.cos(i*angle);
 			var y = py+100*Math.sin(i*angle);
 			var color = _colors[view.level - level];
-			var name = drawshape.showText.call(view,x,y,node.name);
-			var childNode = drawshape.drawChildNode.call(view,x,y,5,color,view.level);
-			var line = drawshape.drawLine.call(view,px,py,x,y,color,view.level);
+			var name = app.shapes.showText.call(view,x,y,node.name);
+			var childNode = app.shapes.drawChildNode.call(view,x,y,5,color,view.level);
+			var line = app.shapes.drawLine.call(view,px,py,x,y,color,view.level);
 			view.stage.addChild(childNode,line,name);
 			node.cx = x;
 			node.cy = y;

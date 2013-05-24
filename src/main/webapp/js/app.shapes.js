@@ -1,7 +1,7 @@
 (function($){
-	drawshape = {};
+	app.shapes = {};
 	var view = this;
-	drawshape.drawLine = function(x0, y0, x1, y1,color,level){ //drawLine
+	app.shapes.drawLine = function(x0, y0, x1, y1,color,level){ //drawLine
 		var line = new createjs.Shape();
 	    line.graphics.beginStroke(color).moveTo(x0, y0).lineTo(x1, y1);
 	    var container = new createjs.Container();
@@ -9,7 +9,7 @@
 	    return container;
 	}
 	
-	drawshape.drawChildNode = function(x,y,r,color,level){ //drawChildNode
+	app.shapes.drawChildNode = function(x,y,r,color,level){ //drawChildNode
 		var childNode = new createjs.Shape();
 		childNode.graphics.beginFill(color).drawCircle(x,y,r-1);
 		var container = new createjs.Container();
@@ -18,7 +18,7 @@
 		
 	}
 	
-	drawshape.drawCenterNode = function(x,y,r,color,level){ //draw the center node
+	app.shapes.drawCenterNode = function(x,y,r,color,level){ //draw the center node
 		var centerNode = new createjs.Shape();
 		centerNode.graphics.beginFill("#a4998e").drawCircle(x,y,r);
 		centerNode.graphics.beginFill(color).drawCircle(x,y,r-1);		
@@ -26,7 +26,7 @@
 		container.addChild(centerNode);
 	    return container;
 	}
-	drawshape.showText = function(x,y,name){
+	app.shapes.showText = function(x,y,name){
 		var text = new createjs.Text(name, "10px Arial, #888");
   		text.x = x - 12;
   		text.y = y + 12;
