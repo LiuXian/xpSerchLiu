@@ -1,6 +1,6 @@
 (function($){
 	var _colors = ["#0B95B1","#ff7f0e","#aec7e8","#dddddd"];
-	var _baseLineLen = [80,40,20,10];
+	var _baseLineLen = [180,80,40,10];
 	brite.registerView("EaselJSForceClusterSliderLiu",  {
 		emptyParent : true,
 		parent:".MainScreen-main"
@@ -47,6 +47,11 @@
 	          			showView.call(view,data);
 	          		}
 	          	});
+			},
+			"DO_ZOOM_CHANGE": function(event,extra){
+				var view = this;
+				view.scaleVal = extra.scaleVal;
+				zoomController.call(view, extra.scaleVal);
 			}
         }
 	});
@@ -80,9 +85,14 @@
 		var color = _colors[view.level - level];
 		var centerNode = app.shapes.drawCenterNode.call(view,view.originPoint.x,view.originPoint.y,r,color,view.level);
 		var name = app.shapes.showText.call(view,view.originPoint.x,view.originPoint.y,view.rootName);
-		centerNode.name = view.currentContainerName;
-		stage.addChild(centerNode);
-		stage.addChild(name);
+		
+		var container = new createjs.Container();
+		view.container = container;
+		var currentContainerName = "containerName";
+		view.currentContainerName = currentContainerName;
+		view.container.name = currentContainerName;
+		view.container.addChild(centerNode,name);
+		stage.addChild(container);		
 		data.cx = view.originPoint.x;
 		data.cy = view.originPoint.y;
 		showChildNode.call(view,data,level);
@@ -107,13 +117,25 @@
 			var name = app.shapes.showText.call(view,x,y,node.name);
 			var childNode = app.shapes.drawChildNode.call(view,x,y,5,color,view.level);
 			var line = app.shapes.drawLine.call(view,px,py,x,y,color,view.level);
-			view.stage.addChild(childNode,line,name);
+			
+			view.container.addChild(childNode,line,name);
+			view.stage.addChild(view.container);
 			node.cx = x;
 			node.cy = y;
 			if(level>0){
-				showChildNode.call(view,node,level-1);
-				
+				showChildNode.call(view,node,level-1);				
 			}
 		});				
 	 }
+	 function zoomController(val){
+			var view = this;
+			var stage = view.stage;
+			var containerLayout = stage.getChildByName(view.currentContainerName);
+			var scaleVal = val || view.scaleVal;
+			containerLayout.scaleX = scaleVal; 
+			containerLayout.scaleY = scaleVal; 
+			containerLayout.x = (1-scaleVal) * view.originPoint.x; 
+			containerLayout.y = (1-scaleVal) * view.originPoint.y; 
+			stage.update();
+		}
 })(jQuery);
