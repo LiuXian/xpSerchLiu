@@ -1,6 +1,6 @@
 (function($){
 	var _colors = ["#0B95B1","#ff7f0e","#aec7e8","#dddddd"];
-
+	var _baseLineLen = [80,40,20,10];
 	brite.registerView("EaselJSForceClusterSliderLiu",  {
 		emptyParent : true,
 		parent:".MainScreen-main"
@@ -100,8 +100,9 @@
 			var angle = 2*Math.PI/parentNode.children.length;
 		}
 		$.each(parentNode.children,function(i,node){
-			var x = px+100*Math.cos(i*angle);
-			var y = py+100*Math.sin(i*angle);
+			var baseLineLength = _baseLineLen[view.level - level];
+			var x = px+baseLineLength*Math.cos(i*angle);
+			var y = py+baseLineLength*Math.sin(i*angle);
 			var color = _colors[view.level - level];
 			var name = app.shapes.showText.call(view,x,y,node.name);
 			var childNode = app.shapes.drawChildNode.call(view,x,y,5,color,view.level);
