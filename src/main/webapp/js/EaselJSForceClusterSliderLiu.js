@@ -35,7 +35,6 @@
 				var view = this;
 				
 				view.level = extra.level;
-				console.log(view.level);
 				$.ajax({
 	          		url:'/getUsers',
 	          		dataType:'json',
@@ -86,9 +85,12 @@
 		data.cx = view.originPoint.x;
 		data.cy = view.originPoint.y;
 		var container = createContanier.call(view,data);
+		container.name = view.currentContainerName;
+		container.alpha = 1;
 		stage.addChild(container);					
 		stage.update(); 
-		container.name = view.currentContainerName;
+		
+		
      }
 	 function showChildNode(parentNode,container,level){
 		var view = this;
@@ -140,13 +142,10 @@
 	    var statLayout = stage.getChildByName(view.currentContainerName);
 	    var oldCenterNode = statLayout.getChildByName(view.cName);
 	    statLayout.removeChild(oldCenterNode);
-	    console.log(oldCenterNode);
 	    var newCenterNode = new createjs.Shape();
 	    var color = _colors[0];
 	    var newCenterNode = app.shapes.drawCenterNode.call(view, n.target.x, n.target.y, color, view.level);
-	    console.log(oldCenterNode);
 	    statLayout.removeChild(n.target);
-	    console.log(n.target);
 	    $.ajax({
       		url:'/getUsers',
       		dataType:'json',
@@ -156,12 +155,21 @@
           			level:view.level
           		 },
       		success:function(data){
-      			var container = createContanier.call(view,data);
-      			view.stage.addChild(container);
-      			stage.update();
+      			//var container = createContanier.call(view,data);
+      			//view.stage.addChild(container);
+      			//stage.update();
       			
       		}
       	});
+	    var ox = -(n.stageX - rx);
+		var oy = -(n.stageY - ry);
+		console.log(ox+"..."+oy);
+		createjs.Ticker.addEventListener("tick", view.stage);
+		createjs.Tween.get(statLayout).to({alpha : 0,x:ox,y:oy}, 1000,createjs.Ease.quartInOut).call(function(){
+			stage.update();
+		}); 
+		
+		
 	 }
 	 function createContanier(data){
 		var view = this;
