@@ -21,7 +21,7 @@
           		dataType:'json',
           		type:'Get',
           		data:{
-          				id :10,
+          				userId :9,
 	          			level:view.level
 	          		 },
           		success:function(data){
@@ -40,7 +40,7 @@
 	          		dataType:'json',
 	          		type:'Get',
 	          		data:{
-	          				id :10,
+	          				userId :10,
 		          			level:view.level
 		          		 },
 	          		success:function(data){
@@ -110,6 +110,7 @@
 			var color = _colors[view.level - level];
 			var name = app.shapes.showText.call(view,x,y,node.name);
 			var childNode = app.shapes.drawChildNode.call(view,x,y,5,color,view.level);
+			childNode.uid = node.id;
 			var line = app.shapes.drawLine.call(view,px,py,x,y,color,view.level);
 			childNode.addEventListener("click", function(n){clickEvent.call(view,n)});
 			container.addChild(childNode,line,name);
@@ -151,30 +152,36 @@
       		dataType:'json',
       		type:'Get',
       		data:{
-      				id :10,
+      				userId :n.target.uid,
+      				
           			level:view.level
           		 },
       		success:function(data){
-      			//var container = createContanier.call(view,data);
-      			//view.stage.addChild(container);
-      			//stage.update();
-      			
+      			console.log(data.id);
+      			data.cx = view.originPoint.x;
+      			data.cy = view.originPoint.y;
+      			var container = createContanier.call(view,data);
+      			view.stage.addChild(container);
+      			var ox = -(n.stageX - rx);
+      			var oy = -(n.stageY - ry);
+      			createjs.Ticker.addEventListener("tick", view.stage);
+      			createjs.Tween.get(statLayout).to({alpha : 0,x:ox,y:oy}, 1000,createjs.Ease.quartInOut); 
+      			container.alpha = 0;
+      			container.x = -ox;
+      			container.y = -oy;
+      			createjs.Tween.get(container).to({alpha : 1,x:0,y:0}, 1000,createjs.Ease.quartInOut).call(function(){
+      				stage.update();
+      				container.name = view.currentContainerName;
+      				view.stage.removeChild(statLayout);
+      			})
       		}
       	});
-	    var ox = -(n.stageX - rx);
-		var oy = -(n.stageY - ry);
-		console.log(ox+"..."+oy);
-		createjs.Ticker.addEventListener("tick", view.stage);
-		createjs.Tween.get(statLayout).to({alpha : 0,x:ox,y:oy}, 1000,createjs.Ease.quartInOut).call(function(){
-			stage.update();
-		}); 
-		
-		
 	 }
 	 function createContanier(data){
 		var view = this;
 		var r = 5;
 		var color = _colors[0];
+		
 		var centerNode = app.shapes.drawCenterNode.call(view,view.originPoint.x,view.originPoint.y,r,color,view.level);
 		centerNode.name = view.cName;
 		var name = app.shapes.showText.call(view,view.originPoint.x,view.originPoint.y,view.rootName);
