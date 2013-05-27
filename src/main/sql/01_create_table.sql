@@ -14,7 +14,7 @@ CREATE TABLE xpsearchliu_schema."user"
   emailhash character(256),
   age bigint,
   CONSTRAINT user_pkey PRIMARY KEY (id)
-)
+);
 
 
 CREATE TABLE xpsearchliu_schema.post (
