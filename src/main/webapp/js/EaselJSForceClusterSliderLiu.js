@@ -26,6 +26,7 @@
 	          		 },
           		success:function(data){
           			showView.call(view,data);
+          			
           		}
           	});
         },
@@ -64,6 +65,7 @@
 	    view.cName = "centerCircle";
 	    view.rootName = data.name;
 	    view.uid = data.id;
+	    
 		createjs.Ticker.useRAF = app.useRAF;
 		createjs.Ticker.setFPS(60);
 		
@@ -81,24 +83,14 @@
   		
 		var stage = new createjs.Stage(canvas);
 		view.stage = stage;
-		var r = 5;
-		var color = _colors[view.level - level];
-		var centerNode = app.shapes.drawCenterNode.call(view,view.originPoint.x,view.originPoint.y,r,color,view.level);
-		var name = app.shapes.showText.call(view,view.originPoint.x,view.originPoint.y,view.rootName);
-		
-		var container = new createjs.Container();
-		view.container = container;
-		var currentContainerName = "containerName";
-		view.currentContainerName = currentContainerName;
-		view.container.name = currentContainerName;
-		view.container.addChild(centerNode,name);
-		stage.addChild(container);		
 		data.cx = view.originPoint.x;
 		data.cy = view.originPoint.y;
-		showChildNode.call(view,data,level);
+		var container = createContanier.call(view,data);
+		stage.addChild(container);					
 		stage.update(); 
+		container.name = view.currentContainerName;
      }
-	 function showChildNode(parentNode,level){
+	 function showChildNode(parentNode,container,level){
 		var view = this;
 		if(level==0){
 			return false;
@@ -117,25 +109,72 @@
 			var name = app.shapes.showText.call(view,x,y,node.name);
 			var childNode = app.shapes.drawChildNode.call(view,x,y,5,color,view.level);
 			var line = app.shapes.drawLine.call(view,px,py,x,y,color,view.level);
-			
-			view.container.addChild(childNode,line,name);
+			childNode.addEventListener("click", function(n){clickEvent.call(view,n)});
+			container.addChild(childNode,line,name);
 			view.stage.addChild(view.container);
 			node.cx = x;
 			node.cy = y;
 			if(level>0){
-				showChildNode.call(view,node,level-1);				
+				showChildNode.call(view,node,container,level-1);	
 			}
 		});				
 	 }
 	 function zoomController(val){
-			var view = this;
-			var stage = view.stage;
-			var containerLayout = stage.getChildByName(view.currentContainerName);
-			var scaleVal = val || view.scaleVal;
-			containerLayout.scaleX = scaleVal; 
-			containerLayout.scaleY = scaleVal; 
-			containerLayout.x = (1-scaleVal) * view.originPoint.x; 
-			containerLayout.y = (1-scaleVal) * view.originPoint.y; 
-			stage.update();
+		var view = this;
+		var stage = view.stage;
+		var containerLayout = stage.getChildByName(view.currentContainerName);
+		var scaleVal = val || view.scaleVal;
+		containerLayout.scaleX = scaleVal; 
+		containerLayout.scaleY = scaleVal; 
+		containerLayout.x = (1-scaleVal) * view.originPoint.x; 
+		containerLayout.y = (1-scaleVal) * view.originPoint.y; 
+		stage.update();
 		}
+	 function clickEvent(n){
+		var view = this;
+		var stage = view.stage;
+		view.oldRootName = view.rootName;
+	    view.rootName = n.target.name;
+	    var rx = view.originPoint.x;
+	    var ry = view.originPoint.y;
+	    var statLayout = stage.getChildByName(view.currentContainerName);
+	    var oldCenterNode = statLayout.getChildByName(view.cName);
+	    statLayout.removeChild(oldCenterNode);
+	    console.log(oldCenterNode);
+	    var newCenterNode = new createjs.Shape();
+	    var color = _colors[0];
+	    var newCenterNode = app.shapes.drawCenterNode.call(view, n.target.x, n.target.y, color, view.level);
+	    console.log(oldCenterNode);
+	    statLayout.removeChild(n.target);
+	    console.log(n.target);
+	    $.ajax({
+      		url:'/getUsers',
+      		dataType:'json',
+      		type:'Get',
+      		data:{
+      				id :10,
+          			level:view.level
+          		 },
+      		success:function(data){
+      			var container = createContanier.call(view,data);
+      			view.stage.addChild(container);
+      			stage.update();
+      			
+      		}
+      	});
+	 }
+	 function createContanier(data){
+		var view = this;
+		var r = 5;
+		var color = _colors[0];
+		var centerNode = app.shapes.drawCenterNode.call(view,view.originPoint.x,view.originPoint.y,r,color,view.level);
+		centerNode.name = view.cName;
+		var name = app.shapes.showText.call(view,view.originPoint.x,view.originPoint.y,view.rootName);
+		var container = new createjs.Container();
+		container.addChild(centerNode);
+		container.name = view.newContainerName;
+		showChildNode.call(view,data,container,view.level);
+		
+		return container;
+	 }
 })(jQuery);
