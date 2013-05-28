@@ -73,11 +73,7 @@
 				createjs.Ticker.useRAF = app.useRAF;
 				createjs.Ticker.setFPS(60);
 				
-				var $ClusterChart = $e.find(".clusterChart");
-				$ClusterChart.empty();
-				$ClusterChart.html('<canvas id="ClusterChart" ></canvas>');  
-				
-				var canvas = $e.find("#ClusterChart")[0];
+				var canvas = $e.find(".ClusterChart-canvas")[0];
 				canvas.width = $e.parent().width();
         		canvas.height = $e.parent().height();
         		
@@ -131,7 +127,6 @@
 			        node.originPotint = {cx:cx,cy:cy};
 			        node.relatedLine = line;
 			        node.angleVal = fpos[i].angleVal;
-			       // cData.weight =parseInt(1+Math.random()*8); 
 			        node.weight = cData.weight;
 			        
 			        //add the mouseover event for node

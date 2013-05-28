@@ -68,11 +68,7 @@
 		createjs.Ticker.useRAF = app.useRAF;
 		createjs.Ticker.setFPS(60);
 		
-		var $ClusterChart = $e.find(".clusterChart");
-		$ClusterChart.empty();
-		$ClusterChart.html('<canvas id="ClusterChart" ></canvas>');  
-		
-		var canvas = $e.find("#ClusterChart")[0];
+		var canvas = $e.find(".ClusterChart-canvas")[0];
 		canvas.width = $e.parent().width();
   		canvas.height = $e.parent().height();
   		

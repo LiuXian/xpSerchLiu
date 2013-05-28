@@ -7,7 +7,7 @@ Handlebars.templates['tmpl-EaselJSForceClusterSlider'] = Handlebars.template(fun
   
 
 
-  return "<div class=\"EaselJSForceClusterSlider easelJSContainer\">\n		<div class=\"clusterChart\"></div>\n		<div class=\"contact-info\"></div>\n	</div>";}
+  return "<div class=\"EaselJSForceClusterSlider easelJSContainer\">\n		<div class=\"ClusterChart\">\n			<canvas class=\"ClusterChart-canvas\"/>\n		</div>\n		<div class=\"contact-info\"></div>\n	</div>";}
 );
 
 // template --- tmpl-EaselJSForceClusterSliderLiu ---
@@ -16,7 +16,7 @@ Handlebars.templates['tmpl-EaselJSForceClusterSliderLiu'] = Handlebars.template(
   
 
 
-  return "<div class=\"EaselJSForceClusterSliderLiu easelJSContainer\">\n		<div class=\"clusterChart\"></div>\n		<div class=\"contact-info\"></div>\n	</div>";}
+  return "<div class=\"EaselJSForceClusterSliderLiu easelJSContainer\">\n		<div class=\"ClusterChart\">\n			<canvas class=\"ClusterChart-canvas\"/>\n		</div>\n		<div class=\"contact-info\"></div>\n	</div>";}
 );
 
 // template --- tmpl-MainScreen ---
