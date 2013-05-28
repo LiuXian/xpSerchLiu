@@ -94,25 +94,42 @@
      }
 	 function showChildNode(parentNode,container,level){
 		var view = this;
+		var stage = view.stage;
 		if(level==0){
 			return false;
 		}
 		var px = parentNode.cx;
 		var py = parentNode.cy;
-		var length = parentNode.children.length;
-		if(length>0){
-			var angle = 2*Math.PI/parentNode.children.length;
+		var childrenData = parentNode.children;
+		if(!childrenData){
+			return ;
 		}
-		$.each(parentNode.children,function(i,node){
+//		var length = parentNode.children.length;
+//		if(length>0){
+//			var angle = 2*Math.PI/length;
+//		}		
+		var angle = parentNode.angleVal;
+		childHandle.call(view,parentNode);
+		var fpos = calculateChildPosition.call(view,childrenData,parentNode,level,angle);
+		$.each(childrenData,function(i,node){
 			var baseLineLength = _baseLineLen[view.level - level];
-			var x = px+baseLineLength*Math.cos(i*angle);
-			var y = py+baseLineLength*Math.sin(i*angle);
+			var cData = childrenData[i];
+			if(parentNode.parentId == cData.id){
+				return ;
+			}
+			//
+			var x = fpos[i].x;
+			var y = fpos[i].y;
 			var color = _colors[view.level - level];
 			var name = app.shapes.showText.call(view,x,y,node.name);
 			var childNode = app.shapes.drawChildNode.call(view,x,y,5,color,view.level);
+			childNode.angleVal = fpos[i].angleVal;
 			childNode.uid = node.id;
+			node.angleVal =  fpos[i].angleVal;
 			var line = app.shapes.drawLine.call(view,px,py,x,y,color,view.level);
+			
 			childNode.addEventListener("click", function(n){clickEvent.call(view,n)});
+			
 			container.addChild(childNode,line,name);
 			view.stage.addChild(view.container);
 			node.cx = x;
@@ -129,8 +146,8 @@
 		var scaleVal = val || view.scaleVal;
 		containerLayout.scaleX = scaleVal; 
 		containerLayout.scaleY = scaleVal; 
-		containerLayout.x = (1-scaleVal) * view.originPoint.x; 
-		containerLayout.y = (1-scaleVal) * view.originPoint.y; 
+		containerLayout.x = (1-scaleVal) * view.originPoint.x;
+		containerLayout.y = (1-scaleVal) * view.originPoint.y;
 		stage.update();
 		}
 	 function clickEvent(n){
@@ -191,5 +208,45 @@
 		showChildNode.call(view,data,container,view.level);
 		
 		return container;
+	 }
+	 function idSort(a,b){
+			return a.id>b.id ? 1 :-1;
+	 }
+	 function calculateChildPosition(childrenData,parentNode,level,exAngle){
+		 exAngle = exAngle || 0;
+		 if(level==1){
+			 console.log(exAngle);
+		 }
+ 		var view = this;
+ 		var rx = parentNode.cx;
+		var ry = parentNode.cy;
+		var baseLineLen = _baseLineLen[view.level - level];
+		var angle = 2*Math.PI/childrenData.length ;
+		if(parentNode.parentId){
+			angle = 2*Math.PI/(childrenData.length+1) ;
+		}
+ 		var fpos = [];
+ 		for(var i = 0; i < childrenData.length; i++){
+	        var cData = childrenData[i];
+	        var l = baseLineLen;
+	        var cx = rx + l * Math.cos(angle * (i+1)+exAngle+Math.PI);
+	        var cy = ry + l * Math.sin(angle * (i+1)+exAngle+Math.PI );
+	        fpos.push({x:cx, y:cy, angleVal:(angle * (i+1)+exAngle +Math.PI)});
+	    }
+		return fpos;
+ 	 }
+	 function childHandle(nodeData){
+		var view = this;
+		
+		
+		if(!nodeData.children){
+			return ;
+		}
+		$.each(nodeData.children,function(index,cData){	
+			
+			if(cData&&nodeData.parentId == cData.id){
+				nodeData.children.splice(index,1);
+			}
+		});
 	 }
 })(jQuery);
