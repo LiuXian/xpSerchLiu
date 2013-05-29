@@ -88,7 +88,7 @@
 		
 		
      }
-	 function showChildNode(parentNode,container,level){
+	 function showChildNode(parentNode,container,level,exAngle){
 		var view = this;
 		var r = 5;
 		var stage = view.stage;
@@ -101,7 +101,7 @@
 		if(!childrenData){
 			return ;
 		}
-		var angle = parentNode.angleVal;
+		var angle = (parentNode.angleVal? parentNode.angleVal:0)+(level==view.level?exAngle:0);
 		childHandle.call(view,parentNode);
 		var fpos = calculateChildPosition.call(view,childrenData,parentNode,level,angle);
 		$.each(childrenData,function(i,node){
@@ -115,10 +115,12 @@
 			var y = fpos[i].y;
 			var color = _colors[view.level - level];
 			var name = app.shapes.showText.call(view,x,y,node.name);
+			
 			node.angleVal =  fpos[i].angleVal;
 			var line = app.shapes.drawLine.call(view,px-(r-1)*Math.cos(Math.PI-node.angleVal),py+(r-1)*Math.sin(Math.PI-node.angleVal),x-(r-1)*Math.cos(node.angleVal),y-(r-1)*Math.sin(node.angleVal),color,view.level);
 			var childNode = app.shapes.drawChildNode.call(view,x,y,r,color,view.level);
 			childNode.uid = node.id;
+			childNode.angleVal = fpos[i].angleVal;
 			childNode.addEventListener("click", function(n){clickEvent.call(view,n)});
 			container.addChild(childNode,line,name);
 			view.stage.addChild(view.container);
@@ -155,6 +157,7 @@
 	    statLayout.removeChild(oldCenterNode);
 	    var newCenterNode = new createjs.Shape();
 	    var color = _colors[0];
+	    
 	    var newCenterNode = app.shapes.drawCenterNode.call(view, n.target.x, n.target.y, color, view.level);
 	    statLayout.removeChild(n.target);
 	    $.ajax({
@@ -169,7 +172,11 @@
       		success:function(data){
       			data.cx = view.originPoint.x;
       			data.cy = view.originPoint.y;
-      			var container = createContanier.call(view,data);
+      			console.log(data.children);
+      			console.log(n.target.uid);
+      			data.children = transformDataFirst.call(view,data.children,n.target.uid);
+      			console.log(data.children);
+      			var container = createContanier.call(view,data,Math.PI+n.target.angleVal);
       			view.stage.addChild(container);
       			var ox = -(n.stageX - rx);
       			var oy = -(n.stageY - ry);
@@ -202,18 +209,20 @@
 		var view = this;
 	    $contactInfo = view.$el.find(".contact-info").empty();
 	 }
-	 function createContanier(data){
+	 function createContanier(data,exAngle){
 		var view = this;
 		var r = 5;
 		var color = _colors[0];
-		
+		if(!exAngle){
+			exAngle = 0;
+		}
 		var centerNode = app.shapes.drawCenterNode.call(view,view.originPoint.x,view.originPoint.y,r,color,view.level);
 		centerNode.name = view.cName;
 		var name = app.shapes.showText.call(view,view.originPoint.x,view.originPoint.y,view.rootName);
 		var container = new createjs.Container();
 		container.addChild(centerNode);
 		container.name = view.newContainerName;
-		showChildNode.call(view,data,container,view.level);
+		showChildNode.call(view,data,container,view.level,exAngle);
 		
 		return container;
 	 }
@@ -256,4 +265,14 @@
 			}
 		});
 	 }
+	 
+	function transformDataFirst(dataSet,id){ 
+		var children = [];
+		var index = 0;
+		$.each(dataSet,function(i,it){
+			if(it.id==id) index = i;
+		});
+		children  = children.concat(dataSet.slice(index,index+1)).concat(dataSet.slice(0,index)).concat(dataSet.slice(index+1));
+		return children;
+	}
 })(jQuery);
