@@ -40,7 +40,7 @@
 	          		dataType:'json',
 	          		type:'Get',
 	          		data:{
-	          				userId :10,
+	          				userId :9,
 		          			level:view.level
 		          		 },
 	          		success:function(data){
@@ -90,6 +90,7 @@
      }
 	 function showChildNode(parentNode,container,level){
 		var view = this;
+		var r = 5;
 		var stage = view.stage;
 		if(level==0){
 			return false;
@@ -100,10 +101,6 @@
 		if(!childrenData){
 			return ;
 		}
-//		var length = parentNode.children.length;
-//		if(length>0){
-//			var angle = 2*Math.PI/length;
-//		}		
 		var angle = parentNode.angleVal;
 		childHandle.call(view,parentNode);
 		var fpos = calculateChildPosition.call(view,childrenData,parentNode,level,angle);
@@ -118,16 +115,16 @@
 			var y = fpos[i].y;
 			var color = _colors[view.level - level];
 			var name = app.shapes.showText.call(view,x,y,node.name);
-			var childNode = app.shapes.drawChildNode.call(view,x,y,5,color,view.level);
-			childNode.angleVal = fpos[i].angleVal;
-			childNode.uid = node.id;
 			node.angleVal =  fpos[i].angleVal;
-			var line = app.shapes.drawLine.call(view,px,py,x,y,color,view.level);
-			
+			var line = app.shapes.drawLine.call(view,px-(r-1)*Math.cos(Math.PI-node.angleVal),py+(r-1)*Math.sin(Math.PI-node.angleVal),x-(r-1)*Math.cos(node.angleVal),y-(r-1)*Math.sin(node.angleVal),color,view.level);
+			var childNode = app.shapes.drawChildNode.call(view,x,y,r,color,view.level);
+			childNode.uid = node.id;
 			childNode.addEventListener("click", function(n){clickEvent.call(view,n)});
-			
 			container.addChild(childNode,line,name);
 			view.stage.addChild(view.container);
+			
+			childNode.addEventListener("mouseover", function(n){mouseoverEvent.call(view,n)});
+			childNode.addEventListener("mouseout", function(n){mouseoutEvent.call(view,n)});
 			node.cx = x;
 			node.cy = y;
 			if(level>0){
@@ -170,7 +167,6 @@
           			level:view.level
           		 },
       		success:function(data){
-      			console.log(data.id);
       			data.cx = view.originPoint.x;
       			data.cy = view.originPoint.y;
       			var container = createContanier.call(view,data);
@@ -189,6 +185,22 @@
       			})
       		}
       	});
+	 }
+	 function mouseoverEvent(evt){
+		var view = this;
+	    var stage = view.stage;
+	    var target = evt.target;
+	    
+	    var $contactInfo = view.$el.find(".contact-info");
+	    $contactInfo.html('<span class="label label-info">Name: '+target.name+'</span>')
+		$contactInfo.css("top",target.y+10);
+		$contactInfo.css("left",target.x+10);
+		$contactInfo.css("opacity",1);
+	 }
+	
+	 function mouseoutEvent(evt){
+		var view = this;
+	    $contactInfo = view.$el.find(".contact-info").empty();
 	 }
 	 function createContanier(data){
 		var view = this;
@@ -211,7 +223,6 @@
 	 function calculateChildPosition(childrenData,parentNode,level,exAngle){
 		 exAngle = exAngle || 0;
 		 if(level==1){
-			 console.log(exAngle);
 		 }
  		var view = this;
  		var rx = parentNode.cx;
