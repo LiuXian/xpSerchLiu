@@ -174,15 +174,16 @@
 	 function zoomController(val,data){
 		var view = this;
 		var stage = view.stage;
+		stage.removeAllChildren();
+
 		var containerLayout = stage.getChildByName(view.currentContainerName);
-		console.log(delete containerLayout);
 		var scaleVal = val || view.scaleVal;
 		showView.call(view,data);
 //		containerLayout.scaleX = scaleVal; 
 //		containerLayout.scaleY = scaleVal; 
 //		containerLayout.x = (1-scaleVal) * view.originPoint.x;
 //		containerLayout.y = (1-scaleVal) * view.originPoint.y;
-		stage.update();
+		//stage.update();
 	 }
 	 function clickEvent(n){
 		var view = this;

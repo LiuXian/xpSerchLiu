@@ -240,7 +240,8 @@
         	
         	function zoomChange(val,data){
 				var view = this;
-				//var stage = view.stage;
+				var stage = view.stage;
+				stage.removeAllChildren();
 				//var containerLayout = stage.getChildByName(view.currentContainerName);
       			//var scaleVal = val || view.scaleVal;
       			view.showView(data);
