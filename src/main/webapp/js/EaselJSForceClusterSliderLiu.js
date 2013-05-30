@@ -1,6 +1,6 @@
 (function($){
 	var _colors = ["#0B95B1","#ff7f0e","#aec7e8","#dddddd"];
-	var _baseLineLen = [180,80,40,10];
+	var _baseLineLen = [180,90,45,22,11,5,2,1];
 	brite.registerView("EaselJSForceClusterSliderLiu",  {
 		emptyParent : true,
 		parent:".MainScreen-main"
@@ -12,6 +12,31 @@
         },
         postDisplay:function(data,config){
         	var view = this;
+        	if (window.addEventListener){
+    			window.addEventListener('DOMMouseScroll', wheel, false);
+    		}
+    		window.onmousewheel = document.onmousewheel = wheel;
+    		
+    		function wheel(event){
+    			var scaleVal = view.scaleVal;
+    			if(event.wheelDeltaY>0){
+    				scaleVal=scaleVal+0.05;
+    				if(scaleVal>3){
+    					scaleVal = 3;
+    				}
+    				view.$el.trigger("DO_ZOOM_CHANGE",{scaleVal:scaleVal});
+    			}else{
+    				scaleVal=scaleVal-0.05;
+    				if(scaleVal<0.32){
+    					scaleVal = 0.3;
+    				}
+    				view.$el.trigger("DO_ZOOM_CHANGE",{scaleVal:scaleVal});
+    			}
+    		}
+    		
+        	
+        	
+        	
         	var $e = view.$el;
         	view.level = $e.closest(".MainScreen").find(".ControlBar #sl1").val();        	
         	var scaleVal = $e.closest(".MainScreen").find(".ControlBar #sl2").val();
@@ -48,10 +73,22 @@
 	          		}
 	          	});
 			},
-			"DO_ZOOM_CHANGE": function(event,extra){
+			"DO_ZOOM_CHANGE": function(event,extra,data){
 				var view = this;
 				view.scaleVal = extra.scaleVal;
-				zoomController.call(view, extra.scaleVal);
+				$.ajax({
+	          		url:'/getUsers',
+	          		dataType:'json',
+	          		type:'Get',
+	          		data:{
+	          				userId :9,
+		          			level:view.level
+		          		 },
+	          		success:function(data){
+	          			//showView.call(view,data);
+	          			zoomController.call(view, extra.scaleVal,data);
+	          		}
+	          	});
 			}
         }
 	});
@@ -83,7 +120,7 @@
 		var container = createContanier.call(view,data);
 		container.name = view.currentContainerName;
 		container.alpha = 1;
-		stage.addChild(container);					
+		stage.addChild(container);			
 		stage.update(); 
 		
 		
@@ -115,7 +152,7 @@
 			var y = fpos[i].y;
 			var color = _colors[view.level - level];
 			var name = app.shapes.showText.call(view,x,y,node.name);
-			
+			console.log();
 			node.angleVal =  fpos[i].angleVal;
 			var line = app.shapes.drawLine.call(view,px-(r-1)*Math.cos(Math.PI-node.angleVal),py+(r-1)*Math.sin(Math.PI-node.angleVal),x-(r-1)*Math.cos(node.angleVal),y-(r-1)*Math.sin(node.angleVal),color,view.level);
 			var childNode = app.shapes.drawChildNode.call(view,x,y,r,color,view.level);
@@ -134,17 +171,19 @@
 			}
 		});				
 	 }
-	 function zoomController(val){
+	 function zoomController(val,data){
 		var view = this;
 		var stage = view.stage;
 		var containerLayout = stage.getChildByName(view.currentContainerName);
+		console.log(delete containerLayout);
 		var scaleVal = val || view.scaleVal;
-		containerLayout.scaleX = scaleVal; 
-		containerLayout.scaleY = scaleVal; 
-		containerLayout.x = (1-scaleVal) * view.originPoint.x;
-		containerLayout.y = (1-scaleVal) * view.originPoint.y;
+		showView.call(view,data);
+//		containerLayout.scaleX = scaleVal; 
+//		containerLayout.scaleY = scaleVal; 
+//		containerLayout.x = (1-scaleVal) * view.originPoint.x;
+//		containerLayout.y = (1-scaleVal) * view.originPoint.y;
 		stage.update();
-		}
+	 }
 	 function clickEvent(n){
 		var view = this;
 		var stage = view.stage;
@@ -193,19 +232,20 @@
       		}
       	});
 	 }
-	 function mouseoverEvent(evt){
+	 function mouseoverEvent(n){
 		var view = this;
 	    var stage = view.stage;
-	    var target = evt.target;
+	    var target = n.target;
 	    
 	    var $contactInfo = view.$el.find(".contact-info");
-	    $contactInfo.html('<span class="label label-info">Name: '+target.name+'</span>')
+	    $contactInfo.html('<span class="label label-info">Name: '+n.target.name+'</span>');
+	    console.log(n.target.name)	;
 		$contactInfo.css("top",target.y+10);
 		$contactInfo.css("left",target.x+10);
 		$contactInfo.css("opacity",1);
 	 }
 	
-	 function mouseoutEvent(evt){
+	 function mouseoutEvent(n){
 		var view = this;
 	    $contactInfo = view.$el.find(".contact-info").empty();
 	 }
@@ -222,7 +262,7 @@
 		var container = new createjs.Container();
 		container.addChild(centerNode);
 		container.name = view.newContainerName;
-		showChildNode.call(view,data,container,view.level,exAngle);
+		showChildNode.call(view,data,container,view.level,-exAngle);
 		
 		return container;
 	 }
@@ -236,7 +276,7 @@
  		var view = this;
  		var rx = parentNode.cx;
 		var ry = parentNode.cy;
-		var baseLineLen = _baseLineLen[view.level - level];
+		var baseLineLen = _baseLineLen[view.level - level]*view.scaleVal;
 		var angle = 2*Math.PI/childrenData.length ;
 		if(parentNode.parentId){
 			angle = 2*Math.PI/(childrenData.length+1) ;

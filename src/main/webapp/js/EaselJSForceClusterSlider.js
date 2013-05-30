@@ -16,6 +16,29 @@
             },
             postDisplay:function(data, config){
 				var view = this;
+				
+				if (window.addEventListener){
+	    			window.addEventListener('DOMMouseScroll', wheel, false);
+	    		}
+	    		window.onmousewheel = document.onmousewheel = wheel;
+	    		
+	    		function wheel(event){
+	    			var scaleVal = view.scaleVal;
+	    			if(event.wheelDeltaY>0){
+	    				scaleVal=scaleVal+0.05;
+	    				if(scaleVal>3){
+	    					scaleVal = 3;
+	    				}
+	    				view.$el.trigger("DO_ZOOM_CHANGE",{scaleVal:scaleVal});
+	    			}else{
+	    				scaleVal=scaleVal-0.05;
+	    				if(scaleVal<0.32){
+	    					scaleVal = 0.3;
+	    				}
+	    				view.$el.trigger("DO_ZOOM_CHANGE",{scaleVal:scaleVal});
+	    			}
+	    		}
+				
                 var $e = view.$el;
                 view.level = $e.closest(".MainScreen").find(".ControlBar #sl1").val();
                	var scaleVal = $e.closest(".MainScreen").find(".ControlBar #sl2").val();
@@ -47,7 +70,19 @@
 				"DO_ZOOM_CHANGE": function(event,extra){
 					var view = this;
 					view.scaleVal = extra.scaleVal;
-	                zoomChange.call(view, extra.scaleVal);
+					$.ajax({
+		          		url:'/getUsers',
+		          		dataType:'json',
+		          		type:'Get',
+		          		data:{
+		          				userId :9,
+			          			level:view.level
+			          		 },
+		          		success:function(data){
+		          			zoomChange.call(view, extra.scaleVal,data);
+		          		}
+		          	});
+					
 				},
 				"DO_RAF_CHANGE": function(event,extra){
 					createjs.Ticker.useRAF = app.useRAF;
@@ -169,10 +204,10 @@
 			    
 				    var text = createText.call(view,rx,ry, parentName);
 	      			containerRoot.addChild(text); 
-	      			containerRoot.scaleX = view.scaleVal; 
-					containerRoot.scaleY = view.scaleVal; 
-					containerRoot.x = (1-view.scaleVal) * view.originPoint.x; 
-					containerRoot.y = (1-view.scaleVal) * view.originPoint.y; 
+//	      			containerRoot.scaleX = view.scaleVal; 
+//					containerRoot.scaleY = view.scaleVal; 
+//					containerRoot.x = (1-view.scaleVal) * view.originPoint.x; 
+//					containerRoot.y = (1-view.scaleVal) * view.originPoint.y; 
 				}
 			    
 			    return containerRoot;
@@ -183,14 +218,14 @@
         		var rx = originPoint.x;
 				var ry = originPoint.y;
 				var weightPerLength = _weightPerLength[view.level - level];
-      			var baseLineLen = _baseLineLen[view.level - level];
+      			var baseLineLen = _baseLineLen[view.level - level]*view.scaleVal;
       			var angle = Math.PI * 2 / childrenData.length ;
         		var fpos = [];
 		      	for(var i = 0; i < childrenData.length; i++){
 			        var cData = childrenData[i];
 			        
-			        var weight = parseInt(Math.random()*8+1);
-			       // var weight = cData.weight;
+			        //var weight = parseInt(Math.random()*8+1);
+			        var weight = cData.weight;
 			        cData.weight = weight;
 					//the higher weight, the closer the length
 					weight = 10 - weight;
@@ -203,16 +238,17 @@
 			    return fpos;
         	}
         	
-        	function zoomChange(val){
+        	function zoomChange(val,data){
 				var view = this;
-				var stage = view.stage;
-				var containerLayout = stage.getChildByName(view.currentContainerName);
-      			var scaleVal = val || view.scaleVal;
-                containerLayout.scaleX = scaleVal; 
-				containerLayout.scaleY = scaleVal; 
-				containerLayout.x = (1-scaleVal) * view.originPoint.x; 
-				containerLayout.y = (1-scaleVal) * view.originPoint.y; 
-				stage.update();
+				//var stage = view.stage;
+				//var containerLayout = stage.getChildByName(view.currentContainerName);
+      			//var scaleVal = val || view.scaleVal;
+      			view.showView(data);
+//              containerLayout.scaleX = scaleVal; 
+//				containerLayout.scaleY = scaleVal; 
+//				containerLayout.x = (1-scaleVal) * view.originPoint.x; 
+//				containerLayout.y = (1-scaleVal) * view.originPoint.y; 
+				//stage.update();
 			}
         	
         	function createNodeCircle(cx,cy,cName,level,id){
