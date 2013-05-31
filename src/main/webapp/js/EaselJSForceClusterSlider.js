@@ -407,6 +407,8 @@
 			    var relatedContainer = target.relatedContainer;
 			    var relatedText = target.relatedText;
 			    var relatedLine = target.relatedLine;
+			    console.log(target);
+			    console.log(relatedLine);
 			    var offset = {x:target.x-evt.stageX, y:target.y-evt.stageY};
 				
 			    evt.addEventListener("mousemove",function(ev) {
@@ -472,7 +474,7 @@
 			
 			function reDrawLine(line,offsetX,offsetY) {
 		        var view = this;
-		        var lineClone = {x0:line.x0+0, y0:line.y0+0, x1:line.x1+0, y1:line.y1+0};
+		        var lineClone = {x0:line.x0, y0:line.y0, x1:line.x1, y1:line.y1};
 		        line.graphics.clear().beginStroke(line.color).moveTo(lineClone.x0, lineClone.y0).lineTo(offsetX, offsetY);
 		        line.x1 = offsetX;
 		        line.y1 = offsetY;

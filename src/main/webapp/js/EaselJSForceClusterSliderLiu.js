@@ -142,6 +142,7 @@
 		childHandle.call(view,parentNode);
 		var fpos = calculateChildPosition.call(view,childrenData,parentNode,level,angle);
 		$.each(childrenData,function(i,node){
+			
 			var baseLineLength = _baseLineLen[view.level - level];
 			var cData = childrenData[i];
 			if(parentNode.parentId == cData.id){
@@ -152,18 +153,20 @@
 			var y = fpos[i].y;
 			var color = _colors[view.level - level];
 			var name = app.shapes.showText.call(view,x,y,node.name);
-			console.log();
 			node.angleVal =  fpos[i].angleVal;
 			var line = app.shapes.drawLine.call(view,px-(r-1)*Math.cos(Math.PI-node.angleVal),py+(r-1)*Math.sin(Math.PI-node.angleVal),x-(r-1)*Math.cos(node.angleVal),y-(r-1)*Math.sin(node.angleVal),color,view.level);
 			var childNode = app.shapes.drawChildNode.call(view,x,y,r,color,view.level);
 			childNode.uid = node.id;
 			childNode.angleVal = fpos[i].angleVal;
+			childNode.relatedLine = line;
+			childNode.relatedText = name;
 			childNode.addEventListener("click", function(n){clickEvent.call(view,n)});
 			container.addChild(childNode,line,name);
 			view.stage.addChild(view.container);
 			
 			childNode.addEventListener("mouseover", function(n){mouseoverEvent.call(view,n)});
 			childNode.addEventListener("mouseout", function(n){mouseoutEvent.call(view,n)});
+			childNode.addEventListener("mousedown", function(n){mousedownEvent.call(view,n)});
 			node.cx = x;
 			node.cy = y;
 			if(level>0){
@@ -175,18 +178,15 @@
 		var view = this;
 		var stage = view.stage;
 		stage.removeAllChildren();
-
 		var containerLayout = stage.getChildByName(view.currentContainerName);
 		var scaleVal = val || view.scaleVal;
 		showView.call(view,data);
-//		containerLayout.scaleX = scaleVal; 
-//		containerLayout.scaleY = scaleVal; 
-//		containerLayout.x = (1-scaleVal) * view.originPoint.x;
-//		containerLayout.y = (1-scaleVal) * view.originPoint.y;
-		//stage.update();
 	 }
 	 function clickEvent(n){
 		var view = this;
+		 if(view.mousemove){
+			 return false;
+		 }
 		var stage = view.stage;
 		view.oldRootName = view.rootName;
 	    view.rootName = n.target.name;
@@ -212,10 +212,7 @@
       		success:function(data){
       			data.cx = view.originPoint.x;
       			data.cy = view.originPoint.y;
-      			console.log(data.children);
-      			console.log(n.target.uid);
       			data.children = transformDataFirst.call(view,data.children,n.target.uid);
-      			console.log(data.children);
       			var container = createContanier.call(view,data,Math.PI+n.target.angleVal);
       			view.stage.addChild(container);
       			var ox = -(n.stageX - rx);
@@ -250,6 +247,72 @@
 		var view = this;
 	    $contactInfo = view.$el.find(".contact-info").empty();
 	 }
+	 function mousedownEvent(evt){
+			var view = this;
+		    var stage = view.stage;
+		    //view.mousemove = false;
+			var target = evt.target;
+		    var ox = target.children[0].x;
+		    var oy = target.children[0].y;
+		    
+		    var relatedText = target.relatedText;
+		    var relatedLine = target.relatedLine;
+		    var olx = relatedLine.children[0].x1;
+		    var oly = relatedLine.children[0].y1;
+		    var offset = {x:target.x-evt.stageX, y:target.y-evt.stageY};
+		    evt.addEventListener("mousemove",function(ev) {
+		    	view.$el.find(".contact-info").empty();
+		    	view.mousemove = true;
+		    	var offsetX = ev.stageX - target.x + offset.x;
+		        var offsetY = ev.stageY - target.y + offset.y;
+		        target.x = ev.stageX+offset.x;
+		        target.y = ev.stageY+offset.y;
+		        console.log(ox+"  ,,"+oy);
+		        if(relatedText){
+		        	relatedText.x = relatedText.x+ offsetX;
+		        	relatedText.y = relatedText.y+ offsetY;
+		        }
+		        app.shapes.reDrawLine(target.relatedLine,offsetX,offsetY);
+		        
+		        //stage.addChild(app.shapes.drawLine(0,0,1000,1000,"#000",1));
+		        stage.update();
+		        
+		    });
+		    
+		    evt.addEventListener("mouseup",function(ev) {
+		    	var offsetX = ev.stageX - target.x + offset.x;
+		        var offsetY = ev.stageY - target.y + offset.y;
+		    	var perX = (ox - target.x) /10;
+		        var perY = (oy - target.y) /10;
+		        createjs.Ticker.addEventListener("tick", tick);
+		        createjs.Tween.get(target).to({}, 10,createjs.Ease.quartInOut); 
+		        var count = 0;
+		        function tick(ev1){
+		        	count++;
+		        	if(count==10){
+		        		createjs.Ticker.removeEventListener("tick",tick);
+		        	}
+		        	target.x +=perX;
+		        	target.y +=perY;
+		        	if(relatedText){
+				       	relatedText.x = relatedText.x+perX;
+				       	relatedText.y = relatedText.y+perY;
+				    }
+		        	app.shapes.reDrawLine(relatedLine,perX,perY);
+		        	view.stage.update();
+		        }
+		        
+		       // view.mousemove = false;
+			});
+	 }
+	 function reDrawLine(line,offsetX,offsetY) {
+	        var view = this;
+	        var lineClone = {x0:line.x0+0, y0:line.y0+0, x1:line.x1+0, y1:line.y1+0};
+	        line.graphics.clear().beginStroke(line.color).moveTo(lineClone.x0, lineClone.y0).lineTo(offsetX, offsetY);
+	        line.x1 = offsetX;
+	        line.y1 = offsetY;
+ 	}
+	 
 	 function createContanier(data,exAngle){
 		var view = this;
 		var r = 5;
