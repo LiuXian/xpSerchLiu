@@ -115,6 +115,7 @@
   		
 		var stage = new createjs.Stage(canvas);
 		view.stage = stage;
+		view.stage.enableMouseOver(100);
 		data.cx = view.originPoint.x;
 		data.cy = view.originPoint.y;
 		var container = createContanier.call(view,data);
@@ -160,13 +161,13 @@
 			childNode.angleVal = fpos[i].angleVal;
 			childNode.relatedLine = line;
 			childNode.relatedText = name;
+			childNode.name = node.name;
+			childNode.addEventListener("mouseover", function(n){mouseoverEvent.call(view,n);});
+			childNode.addEventListener("mouseout", function(n){mouseoutEvent.call(view,n);});
+			childNode.addEventListener("mousedown", function(n){mousedownEvent.call(view,n);});
 			childNode.addEventListener("click", function(n){clickEvent.call(view,n)});
 			container.addChild(childNode,line,name);
 			view.stage.addChild(view.container);
-			
-			childNode.addEventListener("mouseover", function(n){mouseoverEvent.call(view,n)});
-			childNode.addEventListener("mouseout", function(n){mouseoutEvent.call(view,n)});
-			childNode.addEventListener("mousedown", function(n){mousedownEvent.call(view,n)});
 			node.cx = x;
 			node.cy = y;
 			if(level>0){
@@ -234,13 +235,12 @@
 		var view = this;
 	    var stage = view.stage;
 	    var target = n.target;
-	    
 	    var $contactInfo = view.$el.find(".contact-info");
 	    $contactInfo.html('<span class="label label-info">Name: '+n.target.name+'</span>');
-	    console.log(n.target.name)	;
-		$contactInfo.css("top",target.y+10);
-		$contactInfo.css("left",target.x+10);
+		$contactInfo.css("top",n.stageY+10);
+		$contactInfo.css("left",n.stageX+10);
 		$contactInfo.css("opacity",1);
+		
 	 }
 	
 	 function mouseoutEvent(n){
@@ -252,6 +252,7 @@
 		    var stage = view.stage;
 		    //view.mousemove = false;
 			var target = evt.target;
+			//var relatedContainer = target.relatedContainer;
 		    var ox = target.children[0].x;
 		    var oy = target.children[0].y;
 		    
@@ -267,16 +268,12 @@
 		        var offsetY = ev.stageY - target.y + offset.y;
 		        target.x = ev.stageX+offset.x;
 		        target.y = ev.stageY+offset.y;
-		        console.log(ox+"  ,,"+oy);
 		        if(relatedText){
 		        	relatedText.x = relatedText.x+ offsetX;
 		        	relatedText.y = relatedText.y+ offsetY;
 		        }
 		        app.shapes.reDrawLine(target.relatedLine,offsetX,offsetY);
-		        
-		        //stage.addChild(app.shapes.drawLine(0,0,1000,1000,"#000",1));
 		        stage.update();
-		        
 		    });
 		    
 		    evt.addEventListener("mouseup",function(ev) {
@@ -349,6 +346,8 @@
  		for(var i = 0; i < childrenData.length; i++){
 	        var cData = childrenData[i];
 	        var l = baseLineLen;
+	        var weight = cData.weight;
+	        cData.weight = weight;
 	        var cx = rx + l * Math.cos(angle * (i+1)+exAngle+Math.PI);
 	        var cy = ry + l * Math.sin(angle * (i+1)+exAngle+Math.PI );
 	        fpos.push({x:cx, y:cy, angleVal:(angle * (i+1)+exAngle +Math.PI)});
